@@ -1,0 +1,22 @@
+Following queries qualifies for the bonus as well.
+
+graph = TinkerGraph.open().traversal()
+graph.addV(id, 'CS101').as('1').addV(id, 'CS201').as('2').addE('pr').from('2').to('1').addV(id, 'CS220').as('3').addE('pr').from('3').to('2').addV(id, 'CS334').as('4').addE('pr').from('4').to('2').addV(id, 'CS400').as('5').addE('pr').from('5').to('4').addV(id, 'CS420').as('6').addE('pr').from('6').to('3').addE('cr').from('6').to('3').addV(id, 'CS526').as('7').addE('pr').from('7').to('5').addE('cr').from('7').to('5').addV(id, 'CS681').as('8').addE('pr').from('8').to('4').iterate()
+
+TinkerGraph.open() just creates a graph. For the graph to be traversed, we need a TraversalSource. So, we append the traversal() at the end of TinkerGraph.open().
+addV and addE function helps in adding a vertex and an edge respectively. As we are not storing each and every vertex in a variable, we will name it using the as function. The naming of the vertex will be helpful when we are adding the edge, as we need a means to tell from which vertex to which vertex should the edge be. Without 'iterate()' function, it will output the last edge.
+
+
+graph.V().as('a').out('pr').as('b').in('cr').select('a','b')
+
+From the above query, we are supposed to select all pair of vertices which will have two edges between them. graph.V() will select all the vertices and name it 'a'. From these vertices, we find all the edges which are named 'pr'. The out('pr') function will return the vertices which are connected to the 'a' vertices through 'pr' edge and will be named 'b'. Now, the in('cr') function will check if there is also a 'cr' edge coming into 'b'. At the end, the vertices 'a' and 'b' will be selected.
+
+
+graph.V('CS526').repeat(out('pr')).emit()
+
+If we just give graph.V('CS526').out('pr'), it will output the vertex which is connected to 'CS526' by the 'pr' edge. If we want to continuously print the vertex, we need to repeat on the out('pr'). As we do not need to print the vertex 'CS526', the emit function should be used after the repeat function.
+
+
+graph.V().has(id,'CS101').repeat(__.in()).emit().path().count(local).max()
+
+As we need the max depth from a particular node, from the vertex pool, we need to fetch the vertex of our interest. graph.V().has(id,'CS101') does the operation of giving the vertex named 'CS101'. Now, '__.in()' function is used for anonymous traversal as we will not know whether it has a 'pr' or 'cr' incoming edge. We emit this vertex path and calculate the count of the current local object. From all the path count obtained, we get the maximum value using the 'max()' function.

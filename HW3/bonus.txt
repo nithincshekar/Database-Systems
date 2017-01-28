@@ -1,0 +1,10 @@
+Following queries qualifies for the bonus as well.
+
+graph = TinkerGraph.open().traversal()
+graph.addV(id, 'CS101').as('1').addV(id, 'CS201').as('2').addE('pr').from('2').to('1').addV(id, 'CS220').as('3').addE('pr').from('3').to('2').addV(id, 'CS334').as('4').addE('pr').from('4').to('2').addV(id, 'CS400').as('5').addE('pr').from('5').to('4').addV(id, 'CS420').as('6').addE('pr').from('6').to('3').addE('cr').from('6').to('3').addV(id, 'CS526').as('7').addE('pr').from('7').to('5').addE('cr').from('7').to('5').addV(id, 'CS681').as('8').addE('pr').from('8').to('4').iterate()
+
+graph.V().as('a').out('pr').as('b').in('cr').select('a','b')
+
+graph.V('CS526').repeat(out('pr')).emit()
+
+graph.V().has(id,'CS101').repeat(__.in()).emit().path().count(local).max()
